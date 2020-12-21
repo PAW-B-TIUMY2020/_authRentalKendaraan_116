@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentalKendaraan_116.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentalKendaraan_116.Controllers
 {
@@ -19,6 +20,7 @@ namespace RentalKendaraan_116.Controllers
         }
 
         // GET: Peminjamen
+        [Authorize(Policy="readonpolicy")]
         public async Task<IActionResult> Index(string ktsd, string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
             //buat list menyimpan ketersediaan
@@ -106,6 +108,7 @@ namespace RentalKendaraan_116.Controllers
         }
 
         // GET: Peminjamen/Create
+        [Authorize(Policy = "writepolivy")]
         public IActionResult Create()
         {
             ViewData["IdCostumer"] = new SelectList(_context.Costumer, "IdCostumer", "IdCostumer");
@@ -119,6 +122,7 @@ namespace RentalKendaraan_116.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Create([Bind("IdPeminjaman,TglPeminjaman,IdKendaraan,IdCostumer,IdJaminan,Biaya")] Peminjaman peminjaman)
         {
             if (ModelState.IsValid)
@@ -134,6 +138,7 @@ namespace RentalKendaraan_116.Controllers
         }
 
         // GET: Peminjamen/Edit/5
+        [Authorize(Policy = "editpolicy")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -191,6 +196,7 @@ namespace RentalKendaraan_116.Controllers
         }
 
         // GET: Peminjamen/Delete/5
+        [Authorize(Policy = "deletepolicy")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
